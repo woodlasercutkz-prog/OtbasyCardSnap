@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Otbasy CardSnap</title>
+<style>
+:root{--bg:#f6f5f1;--sf:#fff;--tx:#1d2420;--mu:#6b746e;--ac:#1f7a4d;--ac2:#e3f2ea;--bd:#dcdad2;--er:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a17;--sf:#1e2622;--tx:#eef2ef;--mu:#9aa59f;--ac:#4cc58a;--ac2:#1d3328;--bd:#2f3a34;--er:#ff8a80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a17;--sf:#1e2622;--tx:#eef2ef;--mu:#9aa59f;--ac:#4cc58a;--ac2:#1d3328;--bd:#2f3a34;--er:#ff8a80;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:14px 14px 90px}
+h1{font-size:20px;margin:6px 0 2px}
+.sub{color:var(--mu);font-size:13px;margin:0 0 12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+button,.btn{font:inherit;border:1px solid var(--bd);background:var(--sf);color:var(--tx);border-radius:10px;padding:10px 14px;cursor:pointer}
+.pri{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.sm{padding:6px 10px;font-size:13px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:12px}
+.top{display:flex;gap:12px}
+.top img{width:84px;height:84px;object-fit:cover;border-radius:10px;background:var(--ac2);flex:none}
+.top>div{flex:1;min-width:0}
+label{display:block;font-size:11px;color:var(--mu);margin:8px 0 3px;text-transform:uppercase;letter-spacing:.4px}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px}
+textarea{min-height:76px;resize:vertical}
+.row{display:flex;gap:8px}.row>div{flex:1;min-width:0}
+.st{font-size:12px;padding:3px 8px;border-radius:99px;background:var(--ac2);color:var(--ac);display:inline-block;margin-bottom:4px}
+.st.e{color:var(--er)}
+.act{display:flex;gap:8px;margin-top:10px;justify-content:space-between;align-items:center}
+.empty{text-align:center;color:var(--mu);padding:36px 12px;border:1px dashed var(--bd);border-radius:14px}
+.note{font-size:12px;color:var(--mu);margin-top:6px}
+.sel{display:flex;align-items:center;gap:6px;font-size:13px}.sel input{width:auto}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--sf);border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:center}
+.dock button{flex:1;max-width:340px}
+[hidden]{display:none!important}.cfg{margin-bottom:12px}.cfg label.l{display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--tx)}.cfg label.l input{width:auto}</style>
+</head>
+<body>
+<div class="w">
+  <h1>Otbasy CardSnap</h1>
+  <p class="sub">Фото товара → карточка (название, описание, характеристики, цена в ₸) → экспорт JSON для «Импорт из CardSnap» в Otbasy Market</p>
+  <div class="bar">
+    <label class="btn pri" for="cam" style="margin:0;text-transform:none;font-size:15px;color:#fff;letter-spacing:0">📷 Снять / добавить фото</label>
+    <input id="cam" type="file" accept="image/*" multiple hidden>
+    <button id="all" class="sm">Распознать все новые</button>
+    <button id="clr" class="sm">Очистить</button><button id="cfgb" class="sm">⚙ Настройки</button>
+  </div>
+  <div id="cfg" class="card cfg" hidden><label>API-ключ Anthropic (хранится только на этом телефоне)</label><input id="key" type="password" placeholder="sk-ant-…" autocomplete="off"><label class="l" style="margin-top:10px"><input type="checkbox" id="srch"> Искать рыночные цены в интернете (точнее, но дороже и медленнее)</label><p class="note">Фото уходит в Anthropic только при нажатии «Распознать». Без ключа и интернета можно добавлять и править карточки вручную и экспортировать.</p></div>
+  <div id="list"></div>
+  <p class="note">Цены — ориентировочная оценка ИИ по фото, не живой парсинг рынка: проверьте и поправьте перед публикацией. Данные хранятся только в этом браузере.</p>
+</div>
+<div class="dock">
+  <button id="exj" class="pri">Экспорт JSON</button>
+  <button id="exc">Экспорт CSV</button>
+</div>
+<script>
+(function(){
+var items=[],K='ocs_items_v1',list=document.getElementById('list');
+var CATS=['Продукты','Бытовая техника','Мебель','Посуда и кухня','Хозтовары','Бытовая химия','Текстиль','Сад и дача','Ремонт','Красота и здоровье','Детям','Зоотовары'];
+function save(){try{localStorage.setItem(K,JSON.stringify(items))}catch(e){}}
+function load(){try{items=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){items=[]}items.forEach(function(i){if(i.status==='loading')i.status='new'})}
+function uid(){return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function d2b(u){var p=u.split(','),m=/:(.*?);/.exec(p[0])[1],b=atob(p[1]),n=b.length,a=new Uint8Array(n);while(n--)a[n]=b.charCodeAt(n);return new Blob([a],{type:m})}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.src=r.result};r.readAsDataURL(file)})}
+function stLabel(i){return i.status==='loading'?'⏳ Распознаю…':i.status==='ok'?'✓ Готово':i.status==='err'?'⚠ '+(i.err||'Ошибка'):'Новая'}
+function render(){
+  if(!items.length){list.innerHTML='<div class="empty">Пока пусто.<br>Добавьте фото товаров — карточки появятся здесь.</div>';return}
+  list.innerHTML=items.map(function(i){return '<div class="card" data-id="'+i.id+'"><div class="top"><img src="'+i.img+'" alt=""><div><span class="st'+(i.status==='err'?' e':'')+'">'+esc(stLabel(i))+'</span><label>Название</label><input data-f="name" value="'+esc(i.name)+'"></div></div>'
+  +'<div class="row"><div><label>Бренд</label><input data-f="brand" value="'+esc(i.brand)+'"></div><div><label>Категория</label><select data-f="category">'+CATS.map(function(c){return '<option'+(c===i.category?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div></div>'
+  +'<label>Описание</label><textarea data-f="desc">'+esc(i.desc)+'</textarea><label>Характеристики (по строке: «Вес: 5 кг»)</label><textarea data-f="specs">'+esc(i.specs)+'</textarea>'
+  +'<div class="row"><div><label>Цена от, ₸</label><input data-f="pmin" inputmode="numeric" value="'+esc(i.pmin)+'"></div><div><label>Цена до, ₸</label><input data-f="pmax" inputmode="numeric" value="'+esc(i.pmax)+'"></div><div><label>Ваша цена, ₸</label><input data-f="price" inputmode="numeric" value="'+esc(i.price)+'"></div></div>'
+  +'<div class="row"><div><label>Старая цена, ₸</label><input data-f="old" inputmode="numeric" value="'+esc(i.old)+'"></div><div><label>Остаток, шт.</label><input data-f="qty" inputmode="numeric" value="'+esc(i.qty==null?1:i.qty)+'"></div></div><label class="sel" style="margin:8px 0 0;text-transform:none"><input type="checkbox" data-f="fest"'+(i.fest?' checked':'')+'> Показывать в «К празднику»</label>'+'<div class="act"><label class="sel" style="margin:0;text-transform:none"><input type="checkbox" data-f="sel"'+(i.sel!==false?' checked':'')+'> В экспорт</label><span><button class="sm" data-a="re">Распознать</button> <button class="sm" data-a="del">Удалить</button></span></div></div>'}).join('')}
+list.addEventListener('input',function(e){var t=e.target,c=t.closest('.card');if(!c||!t.dataset.f)return;var i=items.find(function(x){return x.id===c.dataset.id});if(!i)return;i[t.dataset.f]=t.type==='checkbox'?t.checked:t.value;save()});
+list.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var c=b.closest('.card'),i=items.find(function(x){return x.id===c.dataset.id});if(b.dataset.a==='del'){items=items.filter(function(x){return x!==i});save();render()}else if(b.dataset.a==='re')analyze(i)});
+document.getElementById('cam').addEventListener('change',async function(e){var fs=[].slice.call(e.target.files);e.target.value='';for(var k=0;k<fs.length;k++){try{items.unshift({id:uid(),img:await shrink(fs[k]),name:'',brand:'',category:'Хозтовары',desc:'',specs:'',old:'',qty:1,fest:false,pmin:'',pmax:'',price:'',status:'new',sel:true})}catch(x){}}save();render()});
+document.getElementById('all').onclick=async function(){var q=items.filter(function(i){return i.status==='new'||i.status==='err'});for(var k=0;k<q.length;k++)await analyze(q[k])};
+document.getElementById('clr').onclick=function(){if(items.length&&confirm('Удалить все карточки?')){items=[];save();render()}};
+var CFG={key:'',search:true};try{CFG=Object.assign(CFG,JSON.parse(localStorage.getItem('ocs_cfg')||'{}'))}catch(e){}
+function saveCfg(){try{localStorage.setItem('ocs_cfg',JSON.stringify(CFG))}catch(e){}}
+var kf=document.getElementById('key'),sf=document.getElementById('srch');kf.value=CFG.key||'';sf.checked=CFG.search!==false;
+kf.oninput=function(){CFG.key=kf.value.trim();saveCfg()};sf.onchange=function(){CFG.search=sf.checked;saveCfg()};
+document.getElementById('cfgb').onclick=function(){var p=document.getElementById('cfg');p.hidden=!p.hidden};
+async function analyze(i){
+  if(!CFG.key){document.getElementById('cfg').hidden=false;alert('Введите API-ключ Anthropic в настройках');return}
+  i.status='loading';render();var ws=CFG.search!==false;
+  var p='Ты помощник интернет-магазина в Казахстане. По фото товара составь карточку на русском. '+(ws?'Найди в интернете актуальные розничные цены на этот товар в Казахстане (kaspi.kz, Technodom, Magnum, market.kz и др.). ':'')+'Верни ТОЛЬКО JSON без пояснений: {"name":"короткое название с брендом и объёмом/размером, если видно","brand":"","category":"одна из: '+CATS.join(', ')+'","desc":"описание 2–3 предложения для покупателя, без выдумок","specs":"характеристики, каждая с новой строки в виде «Вес: 5 кг», только то, что видно или точно известно","pmin":число,"pmax":число,"price":число}. Цены — розничный диапазон в Казахстане в тенге (KZT), целые числа; price — средняя цена. Если не уверен, дай осторожную оценку.';
+  try{
+    var body={model:'claude-sonnet-5-5',max_tokens:ws?2000:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:i.img.split(',')[1]}},{type:'text',text:p}]}]};
+    if(ws)body.tools=[{type:'web_search_20250305',name:'web_search',max_uses:3}];
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+    var j=await res.json();if(!res.ok)throw new Error((j.error&&j.error.message)||('HTTP '+res.status));
+    var t=(j.content||[]).filter(function(b){return b.type==='text'}).map(function(b){return b.text}).join('\n');
+    var r=JSON.parse(t.match(/\{[\s\S]*\}/)[0]);
+    i.name=r.name||i.name;i.brand=r.brand||'';i.category=CATS.indexOf(r.category)>-1?r.category:'Хозтовары';i.desc=r.desc||'';i.specs=Array.isArray(r.specs)?r.specs.join('\n'):(r.specs||'');
+    i.pmin=r.pmin!=null?Math.round(+r.pmin)||'':'';i.pmax=r.pmax!=null?Math.round(+r.pmax)||'':'';if(!i.price)i.price=r.price!=null?Math.round(+r.price)||'':'';
+    i.status='ok';i.err=''}catch(x){i.status='err';i.err=String(x&&x.message||'Не удалось распознать').slice(0,80)}
+  save();render()}
+async function saveFile(name,content,mime){var P=window.Capacitor&&window.Capacitor.Plugins;
+  if(P&&P.Filesystem&&P.Share){var w=await P.Filesystem.writeFile({path:name,data:content,directory:'CACHE',encoding:'utf8'});await P.Share.share({title:name,url:w.uri,dialogTitle:'Сохранить или отправить файл'});return}
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:mime}));a.download=name;document.body.appendChild(a);a.click();a.remove()}
+async function out(name,data,mime){var sel=items.filter(function(i){return i.sel!==false});if(!sel.length){alert('Нет карточек для экспорта');return}
+  var content=data(sel);try{await saveFile(name,content,mime)}catch(e){alert('Не удалось сохранить файл: '+(e&&e.message||e))}}
+document.getElementById('exj').onclick=function(){out('otbasy-products.json',function(s){return JSON.stringify({source:'Otbasy CardSnap',currency:'KZT',exported_at:new Date().toISOString(),products:s.map(function(i){return{name:i.name,cat:CATS.indexOf(i.category)+1||5,price:+i.price||0,old:+i.old||0,qty:+i.qty||0,rating:0,desc:i.desc,specs:(i.brand&&(i.name||'').toLowerCase().indexOf(i.brand.toLowerCase())<0?'Бренд: '+i.brand+'\n':'')+(i.specs||''),fest:i.fest?1:0,img:i.img}})},null,2)},'application/json')};
+document.getElementById('exc').onclick=function(){out('otbasy-products.csv',function(s){var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'};return '\ufeff'+['name','brand','category','description','price','price_min','price_max'].join(',')+'\n'+s.map(function(i){return [i.name,i.brand,i.category,i.desc,i.price,i.pmin,i.pmax].map(q).join(',')}).join('\n')},'text/csv')};
+load();render();
+})();
+</script>
+</body>
+</html>
