@@ -3,56 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Otbasy CardSnap</title>
+<meta name="theme-color" content="#0f8a5f"><title>Otbasy CardSnap</title>
 <style>
-:root{--bg:#f6f5f1;--sf:#fff;--tx:#1d2420;--mu:#6b746e;--ac:#1f7a4d;--ac2:#e3f2ea;--bd:#dcdad2;--er:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a17;--sf:#1e2622;--tx:#eef2ef;--mu:#9aa59f;--ac:#4cc58a;--ac2:#1d3328;--bd:#2f3a34;--er:#ff8a80;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141a17;--sf:#1e2622;--tx:#eef2ef;--mu:#9aa59f;--ac:#4cc58a;--ac2:#1d3328;--bd:#2f3a34;--er:#ff8a80;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.w{max-width:720px;margin:0 auto;padding:14px 14px 90px}
-h1{font-size:20px;margin:6px 0 2px}
-.sub{color:var(--mu);font-size:13px;margin:0 0 12px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-button,.btn{font:inherit;border:1px solid var(--bd);background:var(--sf);color:var(--tx);border-radius:10px;padding:10px 14px;cursor:pointer}
-.pri{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
-.sm{padding:6px 10px;font-size:13px}
-.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:12px}
-.top{display:flex;gap:12px}
-.top img{width:84px;height:84px;object-fit:cover;border-radius:10px;background:var(--ac2);flex:none}
-.top>div{flex:1;min-width:0}
-label{display:block;font-size:11px;color:var(--mu);margin:8px 0 3px;text-transform:uppercase;letter-spacing:.4px}
-input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px}
-textarea{min-height:76px;resize:vertical}
-.row{display:flex;gap:8px}.row>div{flex:1;min-width:0}
-.st{font-size:12px;padding:3px 8px;border-radius:99px;background:var(--ac2);color:var(--ac);display:inline-block;margin-bottom:4px}
-.st.e{color:var(--er)}
-.act{display:flex;gap:8px;margin-top:10px;justify-content:space-between;align-items:center}
-.empty{text-align:center;color:var(--mu);padding:36px 12px;border:1px dashed var(--bd);border-radius:14px}
-.note{font-size:12px;color:var(--mu);margin-top:6px}
-.sel{display:flex;align-items:center;gap:6px;font-size:13px}.sel input{width:auto}
-.dock{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--sf);border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:center}
-.dock button{flex:1;max-width:340px}
-[hidden]{display:none!important}.cfg{margin-bottom:12px}.cfg label.l{display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--tx)}.cfg label.l input{width:auto}</style>
+:root{--bg:#f2f5f2;--sf:#fff;--tx:#14201a;--mu:#66736b;--ac:#0f8a5f;--ac2:#e0f3ea;--bd:#e0e6e1;--er:#c8352b;--sh:0 8px 24px rgba(20,50,35,.09);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1512;--sf:#19211d;--tx:#eef3ef;--mu:#9aa89f;--ac:#2fc98e;--ac2:#18332a;--bd:#2a352f;--er:#ff8f86;--sh:0 8px 24px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1512;--sf:#19211d;--tx:#eef3ef;--mu:#9aa89f;--ac:#2fc98e;--ac2:#18332a;--bd:#2a352f;--er:#ff8f86;--sh:0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:0 14px 130px}
+.hd{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0c7a53,#1fbf84);color:#fff;margin:0 -14px 16px;padding:20px 16px 26px;border-radius:0 0 30px 30px;box-shadow:var(--sh)}
+.logo{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:28px;flex:none}
+.hd h1{font-size:22px;margin:0;line-height:1.15}.hd p{margin:2px 0 0;font-size:13px;opacity:.88}.hd>div:nth-child(2){flex:1;min-width:0}
+.ib{width:50px;height:50px;border-radius:16px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:22px;flex:none}
+.b{min-height:56px;border-radius:18px;font:inherit;font-size:17px;font-weight:650;border:1px solid var(--bd);background:var(--sf);color:var(--tx);display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:0 16px;cursor:pointer;box-shadow:var(--sh)}
+.b:active{transform:scale(.98)}.b.p{background:var(--ac);border-color:var(--ac);color:#fff}.b.t{background:var(--ac2);border-color:transparent;color:var(--ac);box-shadow:none}.b.sm{min-height:48px;font-size:15px;box-shadow:none}
+.acts{display:flex;gap:10px;margin-bottom:10px}.acts>*{flex:1}
+.stats{color:var(--mu);font-size:14px;margin:12px 4px 10px;min-height:20px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:24px;margin-bottom:16px;box-shadow:var(--sh);overflow:hidden}
+.card.cfg{padding:16px;border-radius:22px;margin-bottom:14px}
+.ph{position:relative}.ph img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:var(--ac2)}
+.bdg{position:absolute;left:12px;top:12px;font-size:13px;font-weight:600;padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.55);color:#fff;backdrop-filter:blur(6px)}
+.bdg.ok{background:var(--ac)}.bdg.e{background:var(--er)}
+.x{position:absolute;right:12px;top:12px;width:46px;height:46px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:20px}
+.bdy{padding:6px 16px 16px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+input:not([type=checkbox]),textarea,select{width:100%;font:inherit;font-size:16px;color:var(--tx);background:var(--bg);border:1.5px solid transparent;border-radius:14px;padding:13px 14px;outline:0}
+input:focus,textarea:focus,select:focus{border-color:var(--ac);background:var(--sf)}textarea{min-height:92px;resize:vertical}
+.row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 0;font-size:16px;font-weight:500;color:var(--tx);text-transform:none;letter-spacing:0}
+.sw input{display:none}.sw i{width:54px;height:32px;border-radius:99px;background:var(--bd);position:relative;flex:none;transition:.2s}
+.sw i:after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:.2s}
+.sw input:checked+i{background:var(--ac)}.sw input:checked+i:after{left:25px}
+.bdy .b{margin-top:16px}
+.empty{text-align:center;color:var(--mu);padding:44px 20px;background:var(--sf);border:2px dashed var(--bd);border-radius:24px}.empty .eb{font-size:54px}.empty b{color:var(--tx);font-size:18px}
+.note{font-size:13px;color:var(--mu);margin:10px 2px 0}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--bd)}
+.dock .b:first-child{flex:1}.dock .b:last-child{flex:2}
+#cam{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column;color:#fff}
+.ctop{display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px}
+.rb{width:54px;height:54px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:24px}
+.pill{background:rgba(255,255,255,.18);padding:8px 16px;border-radius:99px;font-weight:600}
+.vf{position:relative;width:100%;aspect-ratio:4/3;background:#111;overflow:hidden}.vf video{width:100%;height:100%;object-fit:cover}
+.vf:after{content:"";position:absolute;inset:16px;border:2px solid rgba(255,255,255,.65);border-radius:18px;pointer-events:none}
+.fl{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .3s}
+.hint{text-align:center;color:#c9d4ce;font-size:14px;padding:16px 24px}
+.cbar{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding:16px 22px calc(26px + env(safe-area-inset-bottom,0px))}
+.cbar>*{width:92px;display:flex;justify-content:center}
+.cbar img{width:64px;height:64px;border-radius:14px;object-fit:cover;border:2px solid #fff}
+.shut{height:88px;width:88px!important;border-radius:50%;border:6px solid #fff;background:rgba(255,255,255,.28);padding:0}.shut:active{transform:scale(.9);background:#fff}
+.done{height:56px;border-radius:18px;border:0;background:var(--ac);color:#fff;font:inherit;font-weight:700;font-size:17px}
+</style>
 </head>
 <body>
 <div class="w">
-  <h1>Otbasy CardSnap</h1>
-  <p class="sub">Фото товара → карточка (название, описание, характеристики, цена в ₸) → экспорт JSON для «Импорт из CardSnap» в Otbasy Market</p>
-  <div class="bar">
-    <label class="btn pri" for="cam" style="margin:0;text-transform:none;font-size:15px;color:#fff;letter-spacing:0">📷 Снять / добавить фото</label>
-    <input id="cam" type="file" accept="image/*" multiple hidden>
-    <button id="all" class="sm">Распознать все новые</button>
-    <button id="clr" class="sm">Очистить</button><button id="cfgb" class="sm">⚙ Настройки</button>
+  <div class="hd"><div class="logo">📦</div><div><h1>Otbasy CardSnap</h1><p>Фото → карточка товара → Otbasy Market</p></div><button class="ib" id="cfgb" aria-label="Настройки">⚙</button></div>
+  <div id="cfg" class="card cfg" hidden>
+    <label style="margin-top:0">API-ключ Anthropic (хранится только на этом телефоне)</label><input id="key" type="password" placeholder="sk-ant-…" autocomplete="off">
+    <label class="sw"><span>Искать рыночные цены в интернете</span><input type="checkbox" id="srch"><i></i></label>
+    <p class="note">Точнее, но дороже и медленнее. Фото уходит в Anthropic только по кнопке «Распознать». Цены — ориентир, проверьте перед публикацией.</p>
+    <button class="b t sm" id="clr" style="margin-top:14px">Удалить все карточки</button>
   </div>
-  <div id="cfg" class="card cfg" hidden><label>API-ключ Anthropic (хранится только на этом телефоне)</label><input id="key" type="password" placeholder="sk-ant-…" autocomplete="off"><label class="l" style="margin-top:10px"><input type="checkbox" id="srch"> Искать рыночные цены в интернете (точнее, но дороже и медленнее)</label><p class="note">Фото уходит в Anthropic только при нажатии «Распознать». Без ключа и интернета можно добавлять и править карточки вручную и экспортировать.</p></div>
+  <div class="acts"><button class="b p" id="camb">📷 Камера</button><label class="b" for="gal">🖼 Галерея</label></div>
+  <button class="b t" id="all">✨ Распознать все новые</button>
+  <div id="stats" class="stats"></div>
   <div id="list"></div>
-  <p class="note">Цены — ориентировочная оценка ИИ по фото, не живой парсинг рынка: проверьте и поправьте перед публикацией. Данные хранятся только в этом браузере.</p>
 </div>
-<div class="dock">
-  <button id="exj" class="pri">Экспорт JSON</button>
-  <button id="exc">Экспорт CSV</button>
+<input id="gal" type="file" accept="image/*" multiple hidden><input id="cam2" type="file" accept="image/*" capture="environment" hidden>
+<div class="dock"><button class="b" id="exc">CSV</button><button class="b p" id="exj">⬆ Экспорт JSON</button></div>
+<div id="cam" hidden>
+  <div class="ctop"><button class="rb" id="cx" aria-label="Закрыть">✕</button><span class="pill" id="cn">0 фото</span><button class="rb" id="cf" aria-label="Сменить камеру">⟲</button></div>
+  <div class="vf"><video id="vid" playsinline muted autoplay></video><div class="fl" id="fl"></div></div>
+  <div class="hint">Поместите товар в рамку — в карточку попадёт именно этот кадр</div>
+  <div class="cbar"><div><img id="cth" alt="" hidden></div><button class="shut" id="cs" aria-label="Снять"></button><div><button class="done" id="cd">Готово</button></div></div>
 </div>
 <script>
 (function(){
@@ -63,18 +85,29 @@ function load(){try{items=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){ite
 function uid(){return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function d2b(u){var p=u.split(','),m=/:(.*?);/.exec(p[0])[1],b=atob(p[1]),n=b.length,a=new Uint8Array(n);while(n--)a[n]=b.charCodeAt(n);return new Blob([a],{type:m})}
-function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.src=r.result};r.readAsDataURL(file)})}
+function toCard(src,sw,sh){var cw=Math.min(document.documentElement.clientWidth||360,720)-28,W=Math.max(320,Math.min(640,Math.round(cw*(window.devicePixelRatio||1)))),H=Math.round(W*3/4),c=document.createElement('canvas');c.width=W;c.height=H;var k=Math.max(W/sw,H/sh),w=sw*k,h=sh*k,x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);x.drawImage(src,(W-w)/2,(H-h)/2,w,h);return c.toDataURL('image/jpeg',.7)}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){res(toCard(im,im.width,im.height))};im.src=r.result};r.readAsDataURL(file)})}
+function newItem(u){return{id:uid(),img:u,name:'',brand:'',category:'Хозтовары',desc:'',specs:'',old:'',qty:1,fest:false,pmin:'',pmax:'',price:'',status:'new',sel:true}}
 function stLabel(i){return i.status==='loading'?'⏳ Распознаю…':i.status==='ok'?'✓ Готово':i.status==='err'?'⚠ '+(i.err||'Ошибка'):'Новая'}
 function render(){
-  if(!items.length){list.innerHTML='<div class="empty">Пока пусто.<br>Добавьте фото товаров — карточки появятся здесь.</div>';return}
-  list.innerHTML=items.map(function(i){return '<div class="card" data-id="'+i.id+'"><div class="top"><img src="'+i.img+'" alt=""><div><span class="st'+(i.status==='err'?' e':'')+'">'+esc(stLabel(i))+'</span><label>Название</label><input data-f="name" value="'+esc(i.name)+'"></div></div>'
+  var ok=items.filter(function(i){return i.status==='ok'}).length;document.getElementById('stats').textContent=items.length?('Карточек: '+items.length+' · готово: '+ok):'';
+  if(!items.length){list.innerHTML='<div class="empty"><div class="eb">📦</div><b>Пока нет товаров</b><br>Нажмите «Камера» и сфотографируйте товар — потом «Распознать»</div>';return}
+  list.innerHTML=items.map(function(i){var cl=i.status==='ok'?' ok':i.status==='err'?' e':'';
+  return '<div class="card" data-id="'+i.id+'"><div class="ph"><img src="'+i.img+'" alt=""><span class="bdg'+cl+'">'+esc(stLabel(i))+'</span><button class="x" data-a="del" aria-label="Удалить">🗑</button></div><div class="bdy">'
+  +'<label>Название</label><input data-f="name" value="'+esc(i.name)+'">'
   +'<div class="row"><div><label>Бренд</label><input data-f="brand" value="'+esc(i.brand)+'"></div><div><label>Категория</label><select data-f="category">'+CATS.map(function(c){return '<option'+(c===i.category?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div></div>'
-  +'<label>Описание</label><textarea data-f="desc">'+esc(i.desc)+'</textarea><label>Характеристики (по строке: «Вес: 5 кг»)</label><textarea data-f="specs">'+esc(i.specs)+'</textarea>'
-  +'<div class="row"><div><label>Цена от, ₸</label><input data-f="pmin" inputmode="numeric" value="'+esc(i.pmin)+'"></div><div><label>Цена до, ₸</label><input data-f="pmax" inputmode="numeric" value="'+esc(i.pmax)+'"></div><div><label>Ваша цена, ₸</label><input data-f="price" inputmode="numeric" value="'+esc(i.price)+'"></div></div>'
-  +'<div class="row"><div><label>Старая цена, ₸</label><input data-f="old" inputmode="numeric" value="'+esc(i.old)+'"></div><div><label>Остаток, шт.</label><input data-f="qty" inputmode="numeric" value="'+esc(i.qty==null?1:i.qty)+'"></div></div><label class="sel" style="margin:8px 0 0;text-transform:none"><input type="checkbox" data-f="fest"'+(i.fest?' checked':'')+'> Показывать в «К празднику»</label>'+'<div class="act"><label class="sel" style="margin:0;text-transform:none"><input type="checkbox" data-f="sel"'+(i.sel!==false?' checked':'')+'> В экспорт</label><span><button class="sm" data-a="re">Распознать</button> <button class="sm" data-a="del">Удалить</button></span></div></div>'}).join('')}
+  +'<label>Описание</label><textarea data-f="desc">'+esc(i.desc)+'</textarea>'
+  +'<label>Характеристики (по строке: «Вес: 5 кг»)</label><textarea data-f="specs">'+esc(i.specs)+'</textarea>'
+  +'<div class="row"><div><label>Цена от, ₸</label><input data-f="pmin" inputmode="numeric" value="'+esc(i.pmin)+'"></div><div><label>Цена до, ₸</label><input data-f="pmax" inputmode="numeric" value="'+esc(i.pmax)+'"></div></div>'
+  +'<div class="row"><div><label>Ваша цена, ₸</label><input data-f="price" inputmode="numeric" value="'+esc(i.price)+'"></div><div><label>Старая цена, ₸</label><input data-f="old" inputmode="numeric" value="'+esc(i.old)+'"></div></div>'
+  +'<label>Остаток, шт.</label><input data-f="qty" inputmode="numeric" value="'+esc(i.qty==null?1:i.qty)+'">'
+  +'<label class="sw"><span>В экспорт</span><input type="checkbox" data-f="sel"'+(i.sel!==false?' checked':'')+'><i></i></label>'
+  +'<label class="sw"><span>Показывать в «К празднику»</span><input type="checkbox" data-f="fest"'+(i.fest?' checked':'')+'><i></i></label>'
+  +'<button class="b t" data-a="re">✨ Распознать по фото</button></div></div>'}).join('')}
 list.addEventListener('input',function(e){var t=e.target,c=t.closest('.card');if(!c||!t.dataset.f)return;var i=items.find(function(x){return x.id===c.dataset.id});if(!i)return;i[t.dataset.f]=t.type==='checkbox'?t.checked:t.value;save()});
 list.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var c=b.closest('.card'),i=items.find(function(x){return x.id===c.dataset.id});if(b.dataset.a==='del'){items=items.filter(function(x){return x!==i});save();render()}else if(b.dataset.a==='re')analyze(i)});
-document.getElementById('cam').addEventListener('change',async function(e){var fs=[].slice.call(e.target.files);e.target.value='';for(var k=0;k<fs.length;k++){try{items.unshift({id:uid(),img:await shrink(fs[k]),name:'',brand:'',category:'Хозтовары',desc:'',specs:'',old:'',qty:1,fest:false,pmin:'',pmax:'',price:'',status:'new',sel:true})}catch(x){}}save();render()});
+async function addFiles(e){var fs=[].slice.call(e.target.files);e.target.value='';for(var k=0;k<fs.length;k++){try{items.unshift(newItem(await shrink(fs[k])))}catch(x){}}save();render()}
+document.getElementById('gal').addEventListener('change',addFiles);document.getElementById('cam2').addEventListener('change',addFiles);
 document.getElementById('all').onclick=async function(){var q=items.filter(function(i){return i.status==='new'||i.status==='err'});for(var k=0;k<q.length;k++)await analyze(q[k])};
 document.getElementById('clr').onclick=function(){if(items.length&&confirm('Удалить все карточки?')){items=[];save();render()}};
 var CFG={key:'',search:true};try{CFG=Object.assign(CFG,JSON.parse(localStorage.getItem('ocs_cfg')||'{}'))}catch(e){}
@@ -104,6 +137,14 @@ async function out(name,data,mime){var sel=items.filter(function(i){return i.sel
   var content=data(sel);try{await saveFile(name,content,mime)}catch(e){alert('Не удалось сохранить файл: '+(e&&e.message||e))}}
 document.getElementById('exj').onclick=function(){out('otbasy-products.json',function(s){return JSON.stringify({source:'Otbasy CardSnap',currency:'KZT',exported_at:new Date().toISOString(),products:s.map(function(i){return{name:i.name,cat:CATS.indexOf(i.category)+1||5,price:+i.price||0,old:+i.old||0,qty:+i.qty||0,rating:0,desc:i.desc,specs:(i.brand&&(i.name||'').toLowerCase().indexOf(i.brand.toLowerCase())<0?'Бренд: '+i.brand+'\n':'')+(i.specs||''),fest:i.fest?1:0,img:i.img}})},null,2)},'application/json')};
 document.getElementById('exc').onclick=function(){out('otbasy-products.csv',function(s){var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'};return '\ufeff'+['name','brand','category','description','price','price_min','price_max'].join(',')+'\n'+s.map(function(i){return [i.name,i.brand,i.category,i.desc,i.price,i.pmin,i.pmax].map(q).join(',')}).join('\n')},'text/csv')};
+var cam=document.getElementById('cam'),vid=document.getElementById('vid'),cn=document.getElementById('cn'),cth=document.getElementById('cth'),stream=null,facing='environment',shots=0;
+function camStop(){if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}vid.srcObject=null}
+async function camStart(){camStop();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing},width:{ideal:1280},height:{ideal:960}},audio:false});vid.srcObject=stream;await vid.play()}catch(e){camClose();alert('Камера недоступна. Разрешите доступ в настройках телефона или добавьте фото через «Галерея».')}}
+function camClose(){camStop();cam.hidden=true;if(shots){save();render()}}
+document.getElementById('camb').onclick=function(){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){document.getElementById('cam2').click();return}shots=0;cn.textContent='0 фото';cth.hidden=true;cam.hidden=false;camStart()};
+document.getElementById('cx').onclick=camClose;document.getElementById('cd').onclick=camClose;
+document.getElementById('cf').onclick=function(){facing=facing==='environment'?'user':'environment';camStart()};
+document.getElementById('cs').onclick=function(){if(!vid.videoWidth)return;var u=toCard(vid,vid.videoWidth,vid.videoHeight);items.unshift(newItem(u));shots++;save();cn.textContent=shots+' '+(shots%10===1&&shots!==11?'фото':'фото');cth.src=u;cth.hidden=false;var f=document.getElementById('fl');f.style.opacity=.85;setTimeout(function(){f.style.opacity=0},90);if(navigator.vibrate)navigator.vibrate(25)};
 load();render();
 })();
 </script>
